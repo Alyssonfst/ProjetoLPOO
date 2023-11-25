@@ -4,6 +4,17 @@ public class Tabuleiro {
     
     private Celula[][] tabuleiro;
     
+    public Celula getCelula(int largura, int altura) {
+
+        if (largura >= 0 && largura < tabuleiro.length && altura >= 0 && altura < tabuleiro[0].length) {
+
+            return tabuleiro[largura][altura];
+        }
+
+        return null;
+    }
+
+
     public Tabuleiro(int largura, int altura) {
 
        tabuleiro = new Celula[largura][altura];

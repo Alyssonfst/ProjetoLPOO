@@ -2,9 +2,7 @@ package MineSweeper;
 
 public class Clique {
     
-    public void processarClique(int largura, int altura) {
-
-        Celula celulaClicada = new Celula();
+    public void processarClique(Celula celulaClicada, int largura, int altura) {
 
         if(celulaClicada.isMina()) {
 
