@@ -1,18 +1,13 @@
 package MineSweeper;
 
 public class Mina extends Celula {
+    private boolean isMina;
 
-    @Override
-    public boolean isMina() {
-        
-        return true;
+    public Mina() {
+        this.isMina = true;
     }
 
-    public void detonar(Tabuleiro tabuleiro, int largura, int altura) {
-
-        if (tabuleiro.getCelula(largura, altura).isMina()) {
-
-            System.out.println("Game Over");
-        }
+    public boolean isMina() {
+        return isMina;
     }
 }

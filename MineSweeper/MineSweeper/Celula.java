@@ -1,6 +1,8 @@
 package MineSweeper;
 
-public class Celula {
+import javax.swing.JButton;
+
+public class Celula  extends JButton{
 
     private boolean isMina;
 
@@ -46,5 +48,11 @@ public class Celula {
         
         this.isVizinhoMina = vizinhoMina;
     }
+
+    public void revelarCelula() {
+
+
+    }
+
 
 }

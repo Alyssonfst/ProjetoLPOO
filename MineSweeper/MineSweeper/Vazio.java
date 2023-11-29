@@ -1,10 +1,13 @@
 package MineSweeper;
 
 public class Vazio extends Celula {
-    
-    @Override
+    private boolean isMina;
+
+    public Vazio() {
+        this.isMina = false;
+    }
+
     public boolean isMina() {
-        
-        return false;
+        return isMina;
     }
 }
