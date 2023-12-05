@@ -1,4 +1,4 @@
-package MineSweeper;
+package MineSweeper.Lógica;
 
 public class Vazio extends Celula {
     private boolean isMina;

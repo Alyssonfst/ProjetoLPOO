@@ -1,12 +1,9 @@
-package MineSweeper;
+package MineSweeper.Lógica;
 
 import java.util.Random;
 
-import java.awt.GridLayout;
 
-import javax.swing.JFrame;
-
-public class Tabuleiro extends JFrame {
+public class Tabuleiro {
     
     private Celula[][] tabuleiro;
 
@@ -16,29 +13,21 @@ public class Tabuleiro extends JFrame {
 
         tabuleiro = new Celula[largura][altura];
 
-        setTitle("Campo Minado");
-        setLayout(new GridLayout(largura, altura));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 1080);
-
         for (int i = 0; i < largura; i++) {
         
             for (int j = 0; j < altura; j++) {
         
-                if(random.nextInt(100) < 60) {
+                if(random.nextInt(100) < 40) {
 
                     tabuleiro[i][j] = new Mina();
-                    add(tabuleiro[i][j]);
 
             } else {
 
                     tabuleiro[i][j] = new Vazio();
-                    add(tabuleiro[i][j]);
                 }
             }
 
         }
-                setVisible(true);
 
     }
 
@@ -52,15 +41,9 @@ public class Tabuleiro extends JFrame {
         return null;
     }
 
-    public void tableStart() {
+    public void tableRestart(int largura, int altura) {
 
-        for(int i = 0; i < tabuleiro.length; i++){
-            
-            for (int j = 0; j < tabuleiro[i].length; j++){
-
-                tabuleiro[i][j] = new Celula();
-            }
-        }
+        new Tabuleiro(largura, altura);
 
     }
 
@@ -93,5 +76,7 @@ public class Tabuleiro extends JFrame {
         return numMina;
     
     }
+
+    
     
 }

@@ -1,4 +1,4 @@
-package MineSweeper;
+package MineSweeper.Lógica;
 public class Bandeira extends Celula {
     
 
