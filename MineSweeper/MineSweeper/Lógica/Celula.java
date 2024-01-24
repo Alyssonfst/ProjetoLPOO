@@ -1,50 +1,63 @@
 package MineSweeper.Lógica;
 
-public class Celula {
+import java.util.ArrayList;
 
-    private boolean isMina;
+public abstract class Celula {
+    private boolean minada;
+    private boolean bandeira;
+    private boolean revelada;
+    private boolean clicada;
 
-    private boolean isVizinhoMina;
+    ArrayList<Celula> vizinhos;
 
-    private boolean Bandeira;
+    public Celula(boolean minada, boolean bandeira, boolean revelada, boolean clicada){
+        this.minada = minada;
+        this.bandeira = bandeira;
+        this.revelada = revelada;
+        this.clicada = clicada;
 
-    public boolean temBandeira() {
-
-        return Bandeira;
+        this.vizinhos = new ArrayList<Celula>();
     }
 
-
-    public boolean mudarBandeira() {
-
-        Bandeira = !Bandeira;
-
-        return Bandeira;
+    public boolean isRevelada(){
+        return revelada;
     }
 
-
-    public void CliqueDireito() {
-
-        mudarBandeira();
+    public void adcionarVizinhos(Celula e){
+        this.vizinhos.add(e);
     }
 
-    public boolean isMina() {
-
-        return isMina;
+    public boolean marcarBandeira(){
+        this.bandeira = !this.bandeira;
+        return this.bandeira;
     }
 
-    public void setMine(boolean mina) {
-
-        this.isMina = mina;
+    public int numMinasNosVizinhos(){
+        int n = 0;
+        for(Celula vizinho : this.vizinhos){
+            if(vizinho.minada) n++;
+        }
+        return n;
     }
 
-    public boolean isVizinhoMina() {
-
-        return isVizinhoMina;
+    //-1 mina
+    //0 vazio
+    //n minas nos vizinhos
+    public int clicar(){
+        this.clicada = true;
+        this.revelada = true;
+        if(this.minada){
+            return -1;
+        }else{
+            return numMinasNosVizinhos();
+        }
     }
 
-    public void setVizinhoMina(boolean vizinhoMina) {
-        
-        this.isVizinhoMina = vizinhoMina;
+    //método para 
+    @Override
+    public String toString() {
+        if (this.minada)
+            return "-1";
+        return "+" + this.numMinasNosVizinhos();
     }
-
 }

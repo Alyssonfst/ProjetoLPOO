@@ -1,82 +1,73 @@
 package MineSweeper.Lógica;
-
 import java.util.Random;
 
-
 public class Tabuleiro {
-    
+
     private Celula[][] tabuleiro;
+    Random rand = new Random();
+    
 
-    public Tabuleiro(int largura, int altura) {
-
-        Random random = new Random();
-
-        tabuleiro = new Celula[largura][altura];
-
-        for (int i = 0; i < largura; i++) {
+    public Tabuleiro(){
+        tabuleiro = new Celula[C.NUM_LINHAS][C.NUM_COLUNAS];
         
-            for (int j = 0; j < altura; j++) {
-        
-                if(random.nextInt(100) < 40) {
-
-                    tabuleiro[i][j] = new Mina();
-
-            } else {
-
-                    tabuleiro[i][j] = new Vazio();
+        for (int bombasGeradas = 0; bombasGeradas < C.NUM_BOMBAS; bombasGeradas++) {
+            int linha = rand.nextInt(C.NUM_LINHAS);
+            int coluna = rand.nextInt(C.NUM_COLUNAS);
+            while(tabuleiro[linha][coluna] instanceof CelulaMinada){
+                linha = rand.nextInt(C.NUM_LINHAS);
+                coluna = rand.nextInt(C.NUM_COLUNAS);
+            }
+            tabuleiro[linha][coluna] = new CelulaMinada();
+        }
+        for (int i = 0; i < C.NUM_LINHAS; i++) {
+            for (int j = 0; j < C.NUM_COLUNAS; j++) {
+                if(tabuleiro[i][j] == null){
+                    tabuleiro[i][j] = new CelulaVazia();
                 }
             }
-
         }
-
-    }
-
-    public Celula getCelula(int largura, int altura) {
-
-        if (largura >= 0 && largura < tabuleiro.length && altura >= 0 && altura < tabuleiro[0].length) {
-
-            return tabuleiro[largura][altura];
-        }
-
-        return null;
-    }
-
-    public void tableRestart(int largura, int altura) {
-
-        new Tabuleiro(largura, altura);
-
-    }
-
-    public int contarMinas(int largura, int altura) {
-
-        int numMina;
-
-        numMina = 0;
-
-        for(int i = -1; i <= 1; i++) {
-            
-            for(int j = -1; j <= 1; j++) {
-                
-                int vizinhaçaX = largura + i;
-
-                int vizinhaçaY = altura + j;
-
-                if (vizinhaçaX >= 0 && vizinhaçaX < tabuleiro.length && vizinhaçaY >= 0 && vizinhaçaY < tabuleiro[0].length) {
-
-                    if(tabuleiro[vizinhaçaX][vizinhaçaY].isMina()) {
-
-                        numMina += 1;
-                    }
+    
+        // Segundo loop para adicionar vizinhos
+        for (int i = 0; i < C.NUM_LINHAS; i++) {
+            for (int j = 0; j < C.NUM_COLUNAS; j++) {
+                 if (i > 0) {
+                    if (j > 0) tabuleiro[i][j].adcionarVizinhos(tabuleiro[i - 1][j - 1]);
+                    tabuleiro[i][j].adcionarVizinhos(tabuleiro[i - 1][j]);
+                    if (j < C.NUM_COLUNAS - 1) tabuleiro[i][j].adcionarVizinhos(tabuleiro[i - 1][j + 1]);
                 }
+                if (j > 0) tabuleiro[i][j].adcionarVizinhos(tabuleiro[i][j - 1]);
+                if (j < C.NUM_COLUNAS - 1) tabuleiro[i][j].adcionarVizinhos(tabuleiro[i][j + 1]);
     
+                if (i < C.NUM_LINHAS - 1) {
+                    if (j > 0) tabuleiro[i][j].adcionarVizinhos(tabuleiro[i + 1][j - 1]);
+                    tabuleiro[i][j].adcionarVizinhos(tabuleiro[i + 1][j]);
+                    if (j < C.NUM_COLUNAS - 1) tabuleiro[i][j].adcionarVizinhos(tabuleiro[i + 1][j + 1]);
+                }
             }
-        
         }
-
-        return numMina;
-    
+    }
+    public int clicar(int linha, int coluna){
+        return tabuleiro[linha][coluna].clicar();
     }
 
-    
-    
+    public Celula getCelula(int linha, int coluna){
+        return tabuleiro[linha][coluna];
+    }
+
+
+    //método para visualizar a criação do campo em forma de matriz
+    @Override
+    public String toString() {
+        String str = " ";
+
+        for(int i = 0; i < C.NUM_LINHAS; i++){
+            for(int j = 0; j < C.NUM_COLUNAS; j++){
+                str += tabuleiro[i][j] + " ";
+            }
+            str += "\n";
+        }
+        return str;
+    }
+
+
 }
