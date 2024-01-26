@@ -6,17 +6,23 @@ public abstract class Celula {
     private boolean minada;
     private boolean bandeira;
     private boolean revelada;
-    private boolean clicada;
 
     ArrayList<Celula> vizinhos;
 
-    public Celula(boolean minada, boolean bandeira, boolean revelada, boolean clicada){
+    public Celula(boolean minada, boolean bandeira, boolean revelada){
         this.minada = minada;
         this.bandeira = bandeira;
         this.revelada = revelada;
-        this.clicada = clicada;
 
         this.vizinhos = new ArrayList<Celula>();
+    }
+
+    public boolean isMinada(){
+        return minada;
+    }
+
+    public boolean isBandeira(){
+        return bandeira;
     }
 
     public boolean isRevelada(){
@@ -44,7 +50,6 @@ public abstract class Celula {
     //0 vazio
     //n minas nos vizinhos
     public int clicar(){
-        this.clicada = true;
         this.revelada = true;
         if(this.minada){
             return -1;
@@ -53,7 +58,7 @@ public abstract class Celula {
         }
     }
 
-    //método para 
+    //método para mostrar o número de minas ao redor de uma célula
     @Override
     public String toString() {
         if (this.minada)

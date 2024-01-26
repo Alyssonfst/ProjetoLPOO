@@ -52,13 +52,46 @@ public class Jogo extends JFrame {
     }
 
     private void clicarCelula(int linha, int coluna) {
-        int resultado = tabuleiro.clicar(linha, coluna);
-
-        if (resultado == -1) {
+        Celula celulaClicada = tabuleiro.getCelula(linha, coluna);
+        
+        if (celulaClicada.isMinada()) {
             JOptionPane.showMessageDialog(this, "Você perdeu! Clique em OK para reiniciar.");
             reiniciarJogo();
-        } else {
+        } else if (!celulaClicada.isRevelada()) {
+            if (celulaClicada.numMinasNosVizinhos() == 0) {
+                revelarCelulasAdjacentes(linha, coluna);
+            } else {
+                celulaClicada.clicar(); 
+            }
+    
             atualizarInterface();
+
+            if(tabuleiro.isFinalizado()){
+                JOptionPane.showMessageDialog(this, "Você ganhou! Clique em OK para reiniciar.");
+            reiniciarJogo();
+            }
+        }
+    }
+    
+    private void revelarCelulasAdjacentes(int linha, int coluna) {
+        if (linha >= 0 && linha < C.NUM_LINHAS && coluna >= 0 && coluna < C.NUM_COLUNAS) {
+            Celula celulaAtual = tabuleiro.getCelula(linha, coluna);
+    
+            if (!celulaAtual.isRevelada() && celulaAtual.numMinasNosVizinhos() == 0) {
+                celulaAtual.clicar(); 
+    
+                //abre os 8 casos vizinhos à celula em questão
+                revelarCelulasAdjacentes(linha - 1, coluna - 1);
+                revelarCelulasAdjacentes(linha - 1, coluna);
+                revelarCelulasAdjacentes(linha - 1, coluna + 1);
+                revelarCelulasAdjacentes(linha, coluna - 1);
+                revelarCelulasAdjacentes(linha, coluna + 1);
+                revelarCelulasAdjacentes(linha + 1, coluna - 1);
+                revelarCelulasAdjacentes(linha + 1, coluna);
+                revelarCelulasAdjacentes(linha + 1, coluna + 1);
+            } else if (!celulaAtual.isRevelada() && celulaAtual.numMinasNosVizinhos() > 0) {
+                celulaAtual.clicar();
+            }
         }
     }
 

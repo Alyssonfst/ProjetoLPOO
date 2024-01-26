@@ -1,6 +1,5 @@
-//package MineSweeper.Lógica;
+package MineSweeper.Lógica;
 
-//public class MinaMaluca extends Celula {
+public class MinaMaluca extends Celula {
     
-    
-//}
+}

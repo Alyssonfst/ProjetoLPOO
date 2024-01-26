@@ -10,10 +10,11 @@ public class Tabuleiro {
     public Tabuleiro(){
         tabuleiro = new Celula[C.NUM_LINHAS][C.NUM_COLUNAS];
         
+        //Primeiro gera aleatoriamente celulasMinadas através do loop com a quantidade pré-definida
         for (int bombasGeradas = 0; bombasGeradas < C.NUM_BOMBAS; bombasGeradas++) {
             int linha = rand.nextInt(C.NUM_LINHAS);
             int coluna = rand.nextInt(C.NUM_COLUNAS);
-            while(tabuleiro[linha][coluna] instanceof CelulaMinada){
+            while(tabuleiro[linha][coluna] instanceof CelulaMinada){//garante que não seja gerado uma celulaMinada no mesmo espaço
                 linha = rand.nextInt(C.NUM_LINHAS);
                 coluna = rand.nextInt(C.NUM_COLUNAS);
             }
@@ -21,7 +22,7 @@ public class Tabuleiro {
         }
         for (int i = 0; i < C.NUM_LINHAS; i++) {
             for (int j = 0; j < C.NUM_COLUNAS; j++) {
-                if(tabuleiro[i][j] == null){
+                if(tabuleiro[i][j] == null){//Ao sair do primeiro loop, preenche os espaços null com celulasVazias
                     tabuleiro[i][j] = new CelulaVazia();
                 }
             }
@@ -52,6 +53,21 @@ public class Tabuleiro {
 
     public Celula getCelula(int linha, int coluna){
         return tabuleiro[linha][coluna];
+    }
+
+    public boolean isFinalizado() {
+        for (int i = 0; i < C.NUM_LINHAS; i++) {
+            for (int j = 0; j < C.NUM_COLUNAS; j++) {
+                Celula celulaAtual = tabuleiro[i][j];
+
+                // Se encontrar uma célula vazia não revelada, o jogo ainda não está finalizado
+                if (!celulaAtual.isRevelada() && !celulaAtual.isMinada()) {
+                    return false;
+                }
+            }
+        }
+        // Se percorrer todas as células e não encontrar uma vazia não revelada, o jogo está finalizado
+        return true;
     }
 
 
