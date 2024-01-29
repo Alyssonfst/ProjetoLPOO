@@ -47,10 +47,7 @@ public class Tabuleiro {
             }
         }
     }
-    public int clicar(int linha, int coluna){
-        return tabuleiro[linha][coluna].clicar();
-    }
-
+    
     public Celula getCelula(int linha, int coluna){
         return tabuleiro[linha][coluna];
     }

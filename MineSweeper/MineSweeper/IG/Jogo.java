@@ -1,8 +1,8 @@
 package MineSweeper.IG;
 
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,31 +37,37 @@ public class Jogo extends JFrame {
                 final int linha = i;
                 final int coluna = j;
 
-                botoes[i][j].addActionListener(new ActionListener() {
+                botoes[i][j].addMouseListener(new MouseAdapter() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {
-                        clicarCelula(linha, coluna);
+                    public void mouseClicked (MouseEvent e) {
+                        if(e.getButton() == MouseEvent.BUTTON1)
+                            clicarCelula(linha, coluna);
+                        if(e.getButton() == MouseEvent.BUTTON3){
+                            marcarBandeira(linha, coluna);
+                        }
                     }
                 });
 
                 add(botoes[i][j]);
             }
         }
-
-        atualizarInterface();
     }
 
     private void clicarCelula(int linha, int coluna) {
-        Celula celulaClicada = tabuleiro.getCelula(linha, coluna);
+        Celula celula = tabuleiro.getCelula(linha, coluna);
         
-        if (celulaClicada.isMinada()) {
+        if(celula.isBandeira()){
+            return;
+        }
+
+        if (celula.isMinada()) {
             JOptionPane.showMessageDialog(this, "Você perdeu! Clique em OK para reiniciar.");
             reiniciarJogo();
-        } else if (!celulaClicada.isRevelada()) {
-            if (celulaClicada.numMinasNosVizinhos() == 0) {
+        } else if (!celula.isRevelada()) {
+            if (celula.numMinasNosVizinhos() == 0) {
                 revelarCelulasAdjacentes(linha, coluna);
             } else {
-                celulaClicada.clicar(); 
+                celula.clicar(); 
             }
     
             atualizarInterface();
@@ -70,6 +76,28 @@ public class Jogo extends JFrame {
                 JOptionPane.showMessageDialog(this, "Você ganhou! Clique em OK para reiniciar.");
             reiniciarJogo();
             }
+        }
+    }
+
+    private void marcarBandeira(int linha, int coluna){
+        Celula celula = tabuleiro.getCelula(linha, coluna);
+
+        if(!celula.isRevelada()){
+            if(celula.isBandeira()){
+                celula.marcarBandeira();
+
+                JButton botaoMarcado = botoes[linha][coluna];
+                botaoMarcado.setEnabled(true);
+                botaoMarcado.setText("");
+
+            } else{
+                celula.marcarBandeira();
+                JButton botaoMarcado = botoes[linha][coluna];
+                botaoMarcado.setEnabled(true);
+                botaoMarcado.setText("B");
+            }
+
+            
         }
     }
     
@@ -105,8 +133,12 @@ public class Jogo extends JFrame {
                     botaoAtual.setEnabled(false);
                     botaoAtual.setText(celulaAtual.toString());
                 } else {
-                    botaoAtual.setEnabled(true);
-                    botaoAtual.setText("");
+                    botaoAtual.setEnabled(true);   
+                    if (celulaAtual.isBandeira()) {
+                        botaoAtual.setText("B");
+                    } else {
+                        botaoAtual.setText("");
+                    }
                 }
             }
         }

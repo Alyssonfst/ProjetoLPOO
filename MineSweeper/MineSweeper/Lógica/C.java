@@ -4,5 +4,5 @@ package MineSweeper.Lógica;
 public abstract class C {
     public static int NUM_LINHAS=7;
     public static int NUM_COLUNAS=7;
-    public static int NUM_BOMBAS = 1;
+    public static int NUM_BOMBAS = 2;
 }
