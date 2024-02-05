@@ -15,6 +15,8 @@ public class Janela extends JFrame implements JanelaInterface {
     private Botao[][] botoes;
     private Tabuleiro tabuleiro;
 
+
+    //Janela do campo minado
     public Janela() {
         super("Campo Minado");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,6 +40,8 @@ public class Janela extends JFrame implements JanelaInterface {
         }
     }
 
+
+    //Ações que ocorrerão ao clicar na célula (esquerda)
     @Override
     public void clicarCelula(int linha, int coluna) {
         Celula celula = tabuleiro.getCelula(linha, coluna);
@@ -65,6 +69,7 @@ public class Janela extends JFrame implements JanelaInterface {
         }
     }
 
+    //Marcação com o botão direito
 
     @Override
     public void marcarBandeira(int linha, int coluna) {
@@ -89,6 +94,10 @@ public class Janela extends JFrame implements JanelaInterface {
         }
     }
 
+    
+    //Revelando as células após o clique
+
+
     @Override
     public void revelarCelulasAdjacentes(int linha, int coluna) {
         if (linha >= 0 && linha < C.NUM_LINHAS && coluna >= 0 && coluna < C.NUM_COLUNAS) {
@@ -112,6 +121,9 @@ public class Janela extends JFrame implements JanelaInterface {
         }
     }    
 
+
+    //Atualização da interface, sempre que necessario
+    
     @Override
     public void atualizarInterface() {
         for (int i = 0; i < C.NUM_LINHAS; i++) {
@@ -133,6 +145,9 @@ public class Janela extends JFrame implements JanelaInterface {
             }
         }
     }
+
+    //Reiniciar
+
     @Override
     public void reiniciarJogo() {
         tabuleiro = new Tabuleiro();
