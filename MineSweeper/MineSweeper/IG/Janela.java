@@ -51,8 +51,24 @@ public class Janela extends JFrame implements JanelaInterface {
         }
 
         if (celula.isMinada()) {
-            JOptionPane.showMessageDialog(this, "Você perdeu! Clique em OK para reiniciar.");
+            
+            int escolha = JOptionPane.showConfirmDialog(
+
+                this,
+                "Você perdeu! Gostaria de reiniciar o jogo?",
+                "Game Over",
+                JOptionPane.YES_NO_OPTION
+                );
+
+            if(escolha == JOptionPane.YES_OPTION) {
             reiniciarJogo();
+            } else {
+
+                this.dispose();
+                Menu menu = new Menu();
+                menu.setVisible(true);
+            }
+
         } else if (!celula.isRevelada()) {
             if (celula.numMinasNosVizinhos() == 0) {
                 revelarCelulasAdjacentes(linha, coluna);

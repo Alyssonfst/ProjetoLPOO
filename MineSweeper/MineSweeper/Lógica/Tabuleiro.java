@@ -11,7 +11,7 @@ public class Tabuleiro {
         tabuleiro = new Celula[C.NUM_LINHAS][C.NUM_COLUNAS];
         
         //Primeiro gera aleatoriamente celulasMinadas através do loop com a quantidade pré-definida
-        for (int bombasGeradas = 0; bombasGeradas < C.NUM_BOMBAS; bombasGeradas++) {
+        for (int bombasGeradas = 0; bombasGeradas < C.NUM_BOMBAS + C.NUM_BOMBA_MALUCA; bombasGeradas++) {
             int linha = rand.nextInt(C.NUM_LINHAS);
             int coluna = rand.nextInt(C.NUM_COLUNAS);
             while(tabuleiro[linha][coluna] instanceof CelulaMinada){//garante que não seja gerado uma celulaMinada no mesmo espaço

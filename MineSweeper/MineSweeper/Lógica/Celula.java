@@ -6,13 +6,15 @@ public abstract class Celula {
     private boolean minada;
     private boolean bandeira;
     private boolean revelada;
+    private boolean maluca;
 
     ArrayList<Celula> vizinhos;
 
-    public Celula(boolean minada, boolean bandeira, boolean revelada){
+    public Celula(boolean minada, boolean bandeira, boolean revelada, boolean maluca){
         this.minada = minada;
         this.bandeira = bandeira;
         this.revelada = revelada;
+        this.maluca = maluca;
 
         this.vizinhos = new ArrayList<Celula>();
     }
@@ -27,6 +29,10 @@ public abstract class Celula {
 
     public boolean isRevelada(){
         return revelada;
+    }
+
+    public boolean isMaluca() {
+        return maluca;
     }
 
     public void adcionarVizinhos(Celula e){
@@ -64,5 +70,10 @@ public abstract class Celula {
         if (this.minada)
             return "-1";
         return "+" + this.numMinasNosVizinhos();
+    }
+
+    public void setValor(String valor) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setValor'");
     }
 }

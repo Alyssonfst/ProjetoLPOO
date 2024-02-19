@@ -8,10 +8,6 @@ import MineSweeper.Lógica.C;
 
 public class Menu extends JFrame implements MenuInterface {
 
-    private static final String[] dificuldades = {"Fácil", "Médio", "Difícil"};
-    private int dificuldadeAtualIndex = 0;
-
-    private JButton dificuldadeButton;
 
     public Menu() {
 
@@ -29,48 +25,17 @@ public class Menu extends JFrame implements MenuInterface {
         jogarButton.addActionListener(e -> iniciar());
         add(jogarButton);
 
-        dificuldadeButton = new JButton("Dificuldade: " + dificuldades[dificuldadeAtualIndex]);
-        dificuldadeButton.setBounds(250, 150, 150, 30);
-        dificuldadeButton.addActionListener(e -> mudarDificuldade());
-        add(dificuldadeButton);
 
         JButton sairButton = new JButton("Sair");
         sairButton.setBounds(250, 200, 100, 30);
         sairButton.addActionListener(e -> sair());
         add(sairButton);
-    }
 
-    //Ação de mudar dificuldade
-    private void mudarDificuldade() {
-        dificuldadeAtualIndex = (dificuldadeAtualIndex + 1) % dificuldades.length;
-        dificuldadeButton.setText("Dificuldade: " + dificuldades[dificuldadeAtualIndex]);
-    }
-
-    //Dificuldade atrelada ao numero de bombas, linhas e colunas
-
-    @Override
-    public int dificuldade() {
-
-        if(dificuldadeAtualIndex == 0) {
-
-            C.NUM_BOMBAS = 20;
-            C.NUM_COLUNAS = 10;
-            C.NUM_LINHAS = 10;
-        
-        } else if(dificuldadeAtualIndex == 1) {
-
-            C.NUM_BOMBAS = 50;
-            C.NUM_COLUNAS = 15;
-            C.NUM_LINHAS = 10;
-
-        } else {
-
-            C.NUM_BOMBAS = 100;
-            C.NUM_COLUNAS = 20;
-            C.NUM_LINHAS = 10;
-        }
-
-        return dificuldadeAtualIndex; 
+        JButton confButton = new JButton();
+        confButton.setBounds(250, 150, 100, 30);
+        confButton.setText("Configurações");
+        confButton.addActionListener(e -> configuracoes());
+        add(confButton);
     }
 
     //Inicialização do jogo, segundo a dificuldade
@@ -78,20 +43,37 @@ public class Menu extends JFrame implements MenuInterface {
     @Override
     public void iniciar() {
 
-        dificuldade();
+        try{
 
-        SwingUtilities.invokeLater(new Runnable() {
-            
-            @Override
-            public void run() {
-                
-                Jogo jogo = new Jogo();
-                
-                jogo.run();
-                
+            if(C.NUM_BOMBAS == 0) {
+
+                throw new ExcecaoDificuldade("Não há bombas para iniciar o jogo. ");
             }
-        });
-    }
+
+            this.dispose();
+    
+    
+            SwingUtilities.invokeLater(new Runnable() {
+                
+                @Override
+                public void run() {
+    
+                    
+                    Jogo jogo = new Jogo();
+                    
+                    jogo.run();
+                    
+                }
+            });
+    
+        
+        } catch(ExcecaoDificuldade e) {
+                
+            System.err.println("Erro para inicializar: " + e.getMessage() + "Selecione uma dificuldade.");
+
+            retornarAoMenu();
+        }
+    } 
 
     //Saída do jogo
 
@@ -100,6 +82,26 @@ public class Menu extends JFrame implements MenuInterface {
         System.exit(0);
     }
 
+    @Override
+    public void configuracoes() {
+
+        this.dispose();
+        
+        Configuracoes conf = new Configuracoes();
+        conf.setMenu(this);
+        conf.setVisible(true);
+
+    }
+
+    //Voltar ao menu
+
+    public void retornarAoMenu() {
+        
+        this.setVisible(true);
+
+    }
+
+    
     //Runner do jogo
 
     public static void main(String[] args) {
