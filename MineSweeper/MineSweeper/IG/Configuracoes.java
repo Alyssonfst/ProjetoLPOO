@@ -14,12 +14,20 @@ public class Configuracoes extends JFrame{
     private boolean modoMaluco = false;
     private JButton malucoButton;
     private String modoAtual;
+    private int numBandeiras;
 
 
     public void setMenu(Menu menu) {
         this.menu = menu;
     }
 
+    public int getNumBandeiras() {
+        return numBandeiras;
+    }
+
+    public void setNumBandeiras(int numBandeiras) {
+        this.numBandeiras = numBandeiras;
+    }
     
     public Configuracoes() {
     
@@ -49,6 +57,7 @@ public class Configuracoes extends JFrame{
     add(malucoButton);
 
     dificuldade();
+    modoDeJogo();
 
     
 }
@@ -95,7 +104,7 @@ public class Configuracoes extends JFrame{
 
     //Dificuldade atrelada ao numero de bombas, linhas e colunas
 
-    private void dificuldade() {
+    int dificuldade() {
 
         if(dificuldadeAtualIndex == 0) {
 
@@ -107,6 +116,8 @@ public class Configuracoes extends JFrame{
             C.NUM_BOMBAS = 15 - C.NUM_BOMBA_MALUCA;
             C.NUM_COLUNAS = 10;
             C.NUM_LINHAS = 10;
+            numBandeiras = 15;
+
         } else if(dificuldadeAtualIndex == 1) {
             
             if(modoMaluco == true) {
@@ -117,6 +128,7 @@ public class Configuracoes extends JFrame{
             C.NUM_BOMBAS = 30 - C.NUM_BOMBA_MALUCA;
             C.NUM_COLUNAS = 20;
             C.NUM_LINHAS = 10;
+            numBandeiras = 30;
 
         } else {
 
@@ -125,12 +137,15 @@ public class Configuracoes extends JFrame{
                 C.NUM_BOMBA_MALUCA = 10;
             }
 
-            C.NUM_BOMBAS = 60 - C.NUM_BOMBA_MALUCA;
+            C.NUM_BOMBAS = 70 - C.NUM_BOMBA_MALUCA;
             C.NUM_COLUNAS = 20;
             C.NUM_LINHAS = 20;
-
+            numBandeiras = 70;
+            
+            
         }
 
+        return dificuldadeAtualIndex;
 
     }
 

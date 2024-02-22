@@ -64,16 +64,15 @@ public abstract class Celula {
         }
     }
 
+    public void setMinada(boolean minada) {
+        this.minada = minada;
+    }
+
     //método para mostrar o número de minas ao redor de uma célula
     @Override
     public String toString() {
         if (this.minada)
             return "-1";
         return "+" + this.numMinasNosVizinhos();
-    }
-
-    public void setValor(String valor) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setValor'");
     }
 }

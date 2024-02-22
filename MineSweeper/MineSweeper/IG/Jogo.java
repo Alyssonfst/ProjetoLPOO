@@ -4,8 +4,8 @@ public class Jogo {
 
     private Janela janela;
 
-    public Jogo() {
-        this.janela = new Janela();
+    public Jogo(long tempoInicial, Configuracoes conf) {
+        this.janela = new Janela(tempoInicial, conf);
     }
 
     public void run() {

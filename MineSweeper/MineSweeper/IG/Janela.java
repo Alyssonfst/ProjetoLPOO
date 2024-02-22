@@ -14,14 +14,20 @@ public class Janela extends JFrame implements JanelaInterface {
 
     private Botao[][] botoes;
     private Tabuleiro tabuleiro;
-
+    private long tempoFinal;
+    private long tempoInicial;
+    private Configuracoes conf;
+    private long pontuacao;
 
     //Janela do campo minado
-    public Janela() {
+    public Janela(long tempoInicial, Configuracoes conf) {
         super("Campo Minado");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
         setLocationRelativeTo(null);
+
+        this.conf = conf;
+        this.tempoInicial = tempoInicial;
 
         tabuleiro = new Tabuleiro();
         int numLinhas = C.NUM_LINHAS;
@@ -79,8 +85,24 @@ public class Janela extends JFrame implements JanelaInterface {
             atualizarInterface();
 
             if(tabuleiro.isFinalizado()){
-                JOptionPane.showMessageDialog(this, "Você ganhou! Clique em OK para reiniciar.");
-            reiniciarJogo();
+
+                tempoFinal = System.currentTimeMillis()/1000;
+
+                if(conf.dificuldade() == 0){
+                    
+                    pontuacao = 1000 - (tempoFinal - tempoInicial)*10;
+                    
+                
+                } else if(conf.dificuldade() == 1) {
+
+                    pontuacao = 125/10 *(1000 -  (tempoFinal - tempoInicial));
+                } else if(conf.dificuldade() == 2) {
+
+                    pontuacao = (1000 - (tempoFinal - tempoInicial)) * 15;
+                }
+
+                JOptionPane.showMessageDialog(this, "Você ganhou! Sua pontuação: " + pontuacao);
+                reiniciarJogo();
             }
         }
     }
@@ -91,24 +113,75 @@ public class Janela extends JFrame implements JanelaInterface {
     public void marcarBandeira(int linha, int coluna) {
         Celula celula = tabuleiro.getCelula(linha, coluna);
 
-        if(!celula.isRevelada()){
-            if(celula.isBandeira()){
-                celula.marcarBandeira();
+        int bandeiras = conf.getNumBandeiras();
 
-                JButton botaoMarcado = botoes[linha][coluna];
-                botaoMarcado.setEnabled(true);
-                botaoMarcado.setText("");
+        if(bandeiras == 0) {
 
-            } else{
-                celula.marcarBandeira();
-                JButton botaoMarcado = botoes[linha][coluna];
-                botaoMarcado.setEnabled(true);
-                botaoMarcado.setText("B");
-            }
+        if(!celula.isMaluca() && celula.isBandeira()) {
 
-            
+            celula.marcarBandeira();
+
+            conf.setNumBandeiras(bandeiras+1);
+
+            JButton botaoMarcado = botoes[linha][coluna];
+            botaoMarcado.setEnabled(true);
+            botaoMarcado.setText("");
         }
+    
+   } else {
+
+         if(!celula.isRevelada()){
+            
+        if(!celula.isBandeira() && celula.isMaluca()) {
+                
+            celula.marcarBandeira();
+
+            conf.setNumBandeiras(bandeiras-1);
+
+            JButton botaoMarcado = botoes[linha][coluna];
+            botaoMarcado.setEnabled(true);
+            botaoMarcado.setText("B");
+
+            tabuleiro.mudarMinas();
+
+            atualizarInterface();
+            
+
+        } else if(!celula.isMaluca() && !celula.isBandeira()) {
+
+            celula.marcarBandeira();
+
+            conf.setNumBandeiras(bandeiras-1);
+
+
+            JButton botaoMarcado = botoes[linha][coluna];
+
+            botaoMarcado.setEnabled(true);
+
+            botaoMarcado.setText("B");
+
+
+        } else if(!celula.isMaluca() && celula.isBandeira()) {
+
+                
+            celula.marcarBandeira();
+
+            conf.setNumBandeiras(bandeiras+1);
+
+
+            JButton botaoMarcado = botoes[linha][coluna];
+
+            botaoMarcado.setEnabled(true);
+
+            botaoMarcado.setText("");
+
+        }
+
     }
+
+}
+
+}
 
     
     //Revelando as células após o clique
@@ -162,11 +235,15 @@ public class Janela extends JFrame implements JanelaInterface {
         }
     }
 
+    
+
+
     //Reiniciar
 
     @Override
     public void reiniciarJogo() {
         tabuleiro = new Tabuleiro();
+        tempoInicial = System.currentTimeMillis()/1000;
         atualizarInterface();
     }
-}
+}    

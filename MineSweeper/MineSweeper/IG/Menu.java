@@ -2,12 +2,15 @@ package MineSweeper.IG;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import MineSweeper.Lógica.C;
 
 public class Menu extends JFrame implements MenuInterface {
 
+    private long tempoInicial;
+    private Configuracoes conf;
 
     public Menu() {
 
@@ -57,9 +60,10 @@ public class Menu extends JFrame implements MenuInterface {
                 
                 @Override
                 public void run() {
-    
+
+                    tempoInicial = System.currentTimeMillis()/1000;
                     
-                    Jogo jogo = new Jogo();
+                    Jogo jogo = new Jogo(tempoInicial, conf);
                     
                     jogo.run();
                     
@@ -69,7 +73,9 @@ public class Menu extends JFrame implements MenuInterface {
         
         } catch(ExcecaoDificuldade e) {
                 
-            System.err.println("Erro para inicializar: " + e.getMessage() + "Selecione uma dificuldade.");
+            System.err.println("Erro para inicializar: " + e.getMessage());
+
+            JOptionPane.showMessageDialog(this, "Difuldade não selecionada nas configurações. Iniciando no modo fácil.");
 
             retornarAoMenu();
         }
@@ -87,7 +93,7 @@ public class Menu extends JFrame implements MenuInterface {
 
         this.dispose();
         
-        Configuracoes conf = new Configuracoes();
+        conf = new Configuracoes();
         conf.setMenu(this);
         conf.setVisible(true);
 

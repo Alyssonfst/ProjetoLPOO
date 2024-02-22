@@ -11,7 +11,7 @@ public class Tabuleiro {
         tabuleiro = new Celula[C.NUM_LINHAS][C.NUM_COLUNAS];
         
         //Primeiro gera aleatoriamente celulasMinadas através do loop com a quantidade pré-definida
-        for (int bombasGeradas = 0; bombasGeradas < C.NUM_BOMBAS + C.NUM_BOMBA_MALUCA; bombasGeradas++) {
+        for (int bombasGeradas = 0; bombasGeradas < C.NUM_BOMBAS; bombasGeradas++) {
             int linha = rand.nextInt(C.NUM_LINHAS);
             int coluna = rand.nextInt(C.NUM_COLUNAS);
             while(tabuleiro[linha][coluna] instanceof CelulaMinada){//garante que não seja gerado uma celulaMinada no mesmo espaço
@@ -19,6 +19,15 @@ public class Tabuleiro {
                 coluna = rand.nextInt(C.NUM_COLUNAS);
             }
             tabuleiro[linha][coluna] = new CelulaMinada();
+        }
+        for (int bombasGeradas = 0; bombasGeradas < C.NUM_BOMBA_MALUCA; bombasGeradas++) {
+            int linha = rand.nextInt(C.NUM_LINHAS);
+            int coluna = rand.nextInt(C.NUM_COLUNAS);
+            while(tabuleiro[linha][coluna] instanceof CelulaMinada){//garante que não seja gerado uma celula maluca no mesmo espaço
+                linha = rand.nextInt(C.NUM_LINHAS);
+                coluna = rand.nextInt(C.NUM_COLUNAS);
+            }
+            tabuleiro[linha][coluna] = new MinaMaluca();
         }
         for (int i = 0; i < C.NUM_LINHAS; i++) {
             for (int j = 0; j < C.NUM_COLUNAS; j++) {
@@ -67,6 +76,31 @@ public class Tabuleiro {
         return true;
     }
 
+    public void mudarMinas() {
+
+        for (int i = 0; i < C.NUM_LINHAS; i++) {
+
+            for (int j = 0; j < C.NUM_COLUNAS; j++) {
+            
+                Celula celula = tabuleiro[i][j];
+            
+                // Se a célula não foi revelada e não tem uma bandeira
+                if (!celula.isRevelada() && !celula.isBandeira()) {
+                    celula.setMinada(Math.random() < 0.2);
+                }
+            }
+        }
+        
+        //Atualizando os números de todas as células
+        for (int i = 0; i < C.NUM_LINHAS; i++) {
+            for (int j = 0; j < C.NUM_COLUNAS; j++) {
+                Celula celula = tabuleiro[i][j];
+                if (celula.isRevelada()) {
+                    celula.numMinasNosVizinhos();
+                }
+            }
+        }
+    }
 
     //método para visualizar a criação do campo em forma de matriz
     @Override
