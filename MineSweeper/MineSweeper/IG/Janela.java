@@ -18,6 +18,8 @@ public class Janela extends JFrame implements JanelaInterface {
     private long tempoInicial;
     private Configuracoes conf;
     private long pontuacao;
+    private Menu menu;
+    private boolean primeiroClique = true;
 
     //Janela do campo minado
     public Janela(long tempoInicial, Configuracoes conf) {
@@ -56,8 +58,14 @@ public class Janela extends JFrame implements JanelaInterface {
             return;
         }
 
+        if(celula.isMinada() && primeiroClique) {
+
+            celula.setMinada(false);
+            primeiroClique = false;
+            clicarCelula(linha, coluna);
+        }
         if (celula.isMinada()) {
-            
+                        
             int escolha = JOptionPane.showConfirmDialog(
 
                 this,
@@ -70,12 +78,24 @@ public class Janela extends JFrame implements JanelaInterface {
             reiniciarJogo();
             } else {
 
-                this.dispose();
-                Menu menu = new Menu();
+                this.setVisible(false);
+
+                if(menu == null) {
+
+                    menu = new Menu();
+                }
+
                 menu.setVisible(true);
             }
 
+        
         } else if (!celula.isRevelada()) {
+
+            if(primeiroClique) {
+                
+                revelarCelulasAdjacentes(linha, coluna);
+                primeiroClique = false;
+            }
             if (celula.numMinasNosVizinhos() == 0) {
                 revelarCelulasAdjacentes(linha, coluna);
             } else {
@@ -132,23 +152,25 @@ public class Janela extends JFrame implements JanelaInterface {
 
          if(!celula.isRevelada()){
             
-        if(!celula.isBandeira() && celula.isMaluca()) {
+            if(!celula.isBandeira() && celula.isMaluca()) {
+                    
+                System.out.println("celula maluca");
+                celula.marcarBandeira();
+
+                conf.setNumBandeiras(bandeiras-1);
+
+                JButton botaoMarcado = botoes[linha][coluna];
+                botaoMarcado.setEnabled(true);
+                botaoMarcado.setText("B");
+
+                tabuleiro.mudarMinas();
+
+                atualizarInterface();
                 
-            celula.marcarBandeira();
-
-            conf.setNumBandeiras(bandeiras-1);
-
-            JButton botaoMarcado = botoes[linha][coluna];
-            botaoMarcado.setEnabled(true);
-            botaoMarcado.setText("B");
-
-            tabuleiro.mudarMinas();
-
-            atualizarInterface();
-            
 
         } else if(!celula.isMaluca() && !celula.isBandeira()) {
 
+            System.out.println("celula misteriosa");
             celula.marcarBandeira();
 
             conf.setNumBandeiras(bandeiras-1);
@@ -237,11 +259,14 @@ public class Janela extends JFrame implements JanelaInterface {
 
     
 
+    
+
 
     //Reiniciar
 
     @Override
     public void reiniciarJogo() {
+        primeiroClique = true;
         tabuleiro = new Tabuleiro();
         tempoInicial = System.currentTimeMillis()/1000;
         atualizarInterface();

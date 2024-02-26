@@ -11,6 +11,7 @@ public class Menu extends JFrame implements MenuInterface {
 
     private long tempoInicial;
     private Configuracoes conf;
+    private Jogo jogo;
 
     public Menu() {
 
@@ -53,7 +54,7 @@ public class Menu extends JFrame implements MenuInterface {
                 throw new ExcecaoDificuldade("Não há bombas para iniciar o jogo. ");
             }
 
-            this.dispose();
+            this.setVisible(false);
     
     
             SwingUtilities.invokeLater(new Runnable() {
@@ -63,7 +64,10 @@ public class Menu extends JFrame implements MenuInterface {
 
                     tempoInicial = System.currentTimeMillis()/1000;
                     
-                    Jogo jogo = new Jogo(tempoInicial, conf);
+                    if(jogo == null) {
+
+                        jogo = new Jogo(tempoInicial, conf);
+                    }
                     
                     jogo.run();
                     
@@ -91,12 +95,17 @@ public class Menu extends JFrame implements MenuInterface {
     @Override
     public void configuracoes() {
 
-        this.dispose();
+        this.setVisible(false);
         
+        if(conf == null) {
+
         conf = new Configuracoes();
         conf.setMenu(this);
         conf.setVisible(true);
+        
+        }
 
+        conf.setVisible(true);
     }
 
     //Voltar ao menu
@@ -107,7 +116,7 @@ public class Menu extends JFrame implements MenuInterface {
 
     }
 
-    
+
     //Runner do jogo
 
     public static void main(String[] args) {

@@ -57,8 +57,6 @@ public class Configuracoes extends JFrame{
     add(malucoButton);
 
     dificuldade();
-    modoDeJogo();
-
     
 }
 
@@ -66,7 +64,7 @@ public class Configuracoes extends JFrame{
 
     public void retornar() {
 
-        this.dispose();
+        this.setVisible(false);
         menu.retornarAoMenu();
     }
     
@@ -98,9 +96,12 @@ public class Configuracoes extends JFrame{
         modoMaluco = !modoMaluco;
         
         modoDeJogo();
+        dificuldade();
     }
         
-    
+    public boolean getModoMaluco() {
+        return modoMaluco;
+    }
 
     //Dificuldade atrelada ao numero de bombas, linhas e colunas
 
@@ -110,7 +111,7 @@ public class Configuracoes extends JFrame{
 
             if(modoMaluco == true) {
 
-                C.NUM_BOMBA_MALUCA = 5;
+                C.NUM_BOMBA_MALUCA = 10;
             }
 
             C.NUM_BOMBAS = 15 - C.NUM_BOMBA_MALUCA;
@@ -122,7 +123,7 @@ public class Configuracoes extends JFrame{
             
             if(modoMaluco == true) {
 
-                C.NUM_BOMBA_MALUCA = 8;
+                C.NUM_BOMBA_MALUCA = 20;
             }
 
             C.NUM_BOMBAS = 30 - C.NUM_BOMBA_MALUCA;
@@ -134,7 +135,7 @@ public class Configuracoes extends JFrame{
 
             if(modoMaluco == true) {
 
-                C.NUM_BOMBA_MALUCA = 10;
+                C.NUM_BOMBA_MALUCA = 70;
             }
 
             C.NUM_BOMBAS = 70 - C.NUM_BOMBA_MALUCA;

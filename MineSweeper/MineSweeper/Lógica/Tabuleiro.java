@@ -23,7 +23,7 @@ public class Tabuleiro {
         for (int bombasGeradas = 0; bombasGeradas < C.NUM_BOMBA_MALUCA; bombasGeradas++) {
             int linha = rand.nextInt(C.NUM_LINHAS);
             int coluna = rand.nextInt(C.NUM_COLUNAS);
-            while(tabuleiro[linha][coluna] instanceof CelulaMinada){//garante que não seja gerado uma celula maluca no mesmo espaço
+            while(tabuleiro[linha][coluna] instanceof CelulaMinada || tabuleiro[linha][coluna] instanceof MinaMaluca){//garante que não seja gerado uma celula maluca no mesmo espaço
                 linha = rand.nextInt(C.NUM_LINHAS);
                 coluna = rand.nextInt(C.NUM_COLUNAS);
             }
