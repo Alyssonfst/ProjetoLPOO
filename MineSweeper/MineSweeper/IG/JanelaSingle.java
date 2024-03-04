@@ -10,7 +10,7 @@ import MineSweeper.Lógica.C;
 import MineSweeper.Lógica.Celula;
 import MineSweeper.Lógica.Tabuleiro;
 
-public class Janela extends JFrame implements JanelaInterface {
+public class JanelaSingle extends JFrame implements JanelaInterface {
 
     private Botao[][] botoes;
     private Tabuleiro tabuleiro;
@@ -22,7 +22,7 @@ public class Janela extends JFrame implements JanelaInterface {
     private boolean primeiroClique = true;
 
     //Janela do campo minado
-    public Janela(long tempoInicial, Configuracoes conf) {
+    public JanelaSingle(long tempoInicial, Configuracoes conf) {
         super("Campo Minado");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
@@ -65,30 +65,9 @@ public class Janela extends JFrame implements JanelaInterface {
             clicarCelula(linha, coluna);
         }
         if (celula.isMinada()) {
-                        
-            int escolha = JOptionPane.showConfirmDialog(
-
-                this,
-                "Você perdeu! Gostaria de reiniciar o jogo?",
-                "Game Over",
-                JOptionPane.YES_NO_OPTION
-                );
-
-            if(escolha == JOptionPane.YES_OPTION) {
-            reiniciarJogo();
-            } else {
-
-                this.setVisible(false);
-
-                if(menu == null) {
-
-                    menu = new Menu();
-                }
-
-                menu.setVisible(true);
-            }
-
         
+            detonar();
+
         } else if (!celula.isRevelada()) {
 
             if(primeiroClique) {
@@ -104,26 +83,66 @@ public class Janela extends JFrame implements JanelaInterface {
     
             atualizarInterface();
 
-            if(tabuleiro.isFinalizado()){
+            verificarFinalizado();
+        }
+    }
 
-                tempoFinal = System.currentTimeMillis()/1000;
+    //Separando em mais métodos para facilitar modificações
 
-                if(conf.dificuldade() == 0){
-                    
-                    pontuacao = 1000 - (tempoFinal - tempoInicial)*10;
-                    
+    public void detonar() {
+
+                        
+        int escolha = JOptionPane.showConfirmDialog(
+
+        this,
+        "Você perdeu! Gostaria de reiniciar o jogo?",
+        "Game Over",
+        JOptionPane.YES_NO_OPTION
+        );
+
+    if(escolha == JOptionPane.YES_OPTION) {
+    reiniciarJogo();
+    } else {
+
+        this.setVisible(false);
+
+        if(menu == null) {
+
+            menu = new Menu();
+            
+        }
+
+        if(conf == null) {
+
+            conf = new Configuracoes();
+        }
+
+        menu.setVisible(true);
+    }
+
+
+    }
+    public void verificarFinalizado() {
+
+        if(tabuleiro.isFinalizado()){
+
+            tempoFinal = System.currentTimeMillis()/1000;
+
+            if(conf.dificuldade() == 0){
                 
-                } else if(conf.dificuldade() == 1) {
+                pontuacao = 1000 - (tempoFinal - tempoInicial)*10;
+                
+            
+            } else if(conf.dificuldade() == 1) {
 
-                    pontuacao = 125/10 *(1000 -  (tempoFinal - tempoInicial));
-                } else if(conf.dificuldade() == 2) {
+                pontuacao = 125/10 *(1000 -  (tempoFinal - tempoInicial));
+            } else if(conf.dificuldade() == 2) {
 
-                    pontuacao = (1000 - (tempoFinal - tempoInicial)) * 15;
-                }
-
-                JOptionPane.showMessageDialog(this, "Você ganhou! Sua pontuação: " + pontuacao);
-                reiniciarJogo();
+                pontuacao = (1000 - (tempoFinal - tempoInicial)) * 15;
             }
+
+            JOptionPane.showMessageDialog(this, "Você ganhou! Sua pontuação: " + pontuacao);
+            reiniciarJogo();
         }
     }
 
@@ -257,11 +276,10 @@ public class Janela extends JFrame implements JanelaInterface {
         }
     }
 
+    public Tabuleiro getTabuleiro() {
+        return tabuleiro;
+    }
     
-
-    
-
-
     //Reiniciar
 
     @Override

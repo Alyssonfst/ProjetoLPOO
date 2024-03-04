@@ -11,7 +11,8 @@ public class Menu extends JFrame implements MenuInterface {
 
     private long tempoInicial;
     private Configuracoes conf;
-    private Jogo jogo;
+    private JogoSingle jogoSingle;
+    private JogoMulti jogoMulti;
 
     public Menu() {
 
@@ -49,30 +50,62 @@ public class Menu extends JFrame implements MenuInterface {
 
         try{
 
+            if(conf == null) {
+
+                conf = new Configuracoes();
+            }
+            
             if(C.NUM_BOMBAS == 0) {
 
                 throw new ExcecaoDificuldade("Não há bombas para iniciar o jogo. ");
             }
 
-            this.setVisible(false);
+            if(conf.getModoMulti()){
+
+                this.setVisible(false);
+                
+                SwingUtilities.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        
+                        tempoInicial = System.currentTimeMillis()/1000;
+
+                        if(jogoMulti == null) {
+
+                            jogoMulti = new JogoMulti(tempoInicial, conf);
+                        }
+
+                        jogoMulti.run();
+                    }
+
+                });
+
+            }
+
     
+             else {
     
-            SwingUtilities.invokeLater(new Runnable() {
+                this.setVisible(false);
+
+                SwingUtilities.invokeLater(new Runnable() {
                 
                 @Override
                 public void run() {
 
                     tempoInicial = System.currentTimeMillis()/1000;
                     
-                    if(jogo == null) {
+                    if(jogoSingle == null) {
 
-                        jogo = new Jogo(tempoInicial, conf);
+                        jogoSingle = new JogoSingle(tempoInicial, conf);
                     }
                     
-                    jogo.run();
+                    jogoSingle.run();
                     
                 }
+                
             });
+        }
     
         
         } catch(ExcecaoDificuldade e) {

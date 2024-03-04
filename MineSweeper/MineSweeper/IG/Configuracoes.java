@@ -15,8 +15,15 @@ public class Configuracoes extends JFrame{
     private JButton malucoButton;
     private String modoAtual;
     private int numBandeiras;
+    private boolean modoMulti = false;
+    private int modoIndex = 0;
 
 
+    public boolean getModoMulti() {
+
+        return modoMulti;
+    }
+    
     public void setMenu(Menu menu) {
         this.menu = menu;
     }
@@ -53,7 +60,7 @@ public class Configuracoes extends JFrame{
 
     malucoButton = new JButton("Modo normal");
     malucoButton.setBounds(225, 150, 150, 30);
-    malucoButton.addActionListener(e -> mudarMaluquice());
+    malucoButton.addActionListener(e -> mudarModoDeJogo());
     add(malucoButton);
 
     dificuldade();
@@ -77,28 +84,52 @@ public class Configuracoes extends JFrame{
         dificuldade();
     }
 
-    private void modoDeJogo() {
+    private void botaoModoDeJogo() {
 
-        if(modoMaluco == false) {
+        if(modoMaluco == true && modoMulti == false) {
 
-            modoAtual = "Normal";
+            modoAtual = "maluco";
         
+        } else if(modoMulti == true && modoMaluco == false) {
+
+            modoAtual = "multijogador";
         } else {
 
-            modoAtual = "Maluco";
+            modoAtual = "normal";
         }
 
         malucoButton.setText("Modo " + modoAtual);
     }
 
-    private void mudarMaluquice() {
+    private void modoDeJogo() {
 
-        modoMaluco = !modoMaluco;
+        if(modoIndex == 0) {
+
+            modoMaluco = false;
+            modoMulti = false;
         
-        modoDeJogo();
-        dificuldade();
+        } else if(modoIndex == 1) {
+
+            modoMaluco = true;
+            modoMulti = false;
+
+        } else if(modoIndex == 2) {
+
+            modoMaluco = false;
+            modoMulti = true;
+        }
+
+        botaoModoDeJogo();
+        
     }
-        
+        private void mudarModoDeJogo() {
+
+            
+            modoIndex = (modoIndex + 1) % 3;
+            modoDeJogo();
+            dificuldade();
+        }
+
     public boolean getModoMaluco() {
         return modoMaluco;
     }
@@ -112,6 +143,12 @@ public class Configuracoes extends JFrame{
             if(modoMaluco == true) {
 
                 C.NUM_BOMBA_MALUCA = 10;
+                System.out.println("Modo maluco");
+            }
+
+            else {
+
+                C.NUM_BOMBA_MALUCA = 0;
             }
 
             C.NUM_BOMBAS = 15 - C.NUM_BOMBA_MALUCA;
@@ -124,7 +161,13 @@ public class Configuracoes extends JFrame{
             if(modoMaluco == true) {
 
                 C.NUM_BOMBA_MALUCA = 20;
+            
+            } else {
+
+                C.NUM_BOMBA_MALUCA = 0;
+
             }
+
 
             C.NUM_BOMBAS = 30 - C.NUM_BOMBA_MALUCA;
             C.NUM_COLUNAS = 20;
@@ -136,6 +179,11 @@ public class Configuracoes extends JFrame{
             if(modoMaluco == true) {
 
                 C.NUM_BOMBA_MALUCA = 70;
+
+            } else {
+
+                C.NUM_BOMBA_MALUCA = 0;
+
             }
 
             C.NUM_BOMBAS = 70 - C.NUM_BOMBA_MALUCA;
@@ -150,5 +198,6 @@ public class Configuracoes extends JFrame{
 
     }
 
+    
 
 }

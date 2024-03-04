@@ -35,6 +35,10 @@ public abstract class Celula {
         return maluca;
     }
 
+    public void setRevelada(boolean revelada) {
+        this.revelada = revelada;
+    }
+    
     public void adcionarVizinhos(Celula e){
         this.vizinhos.add(e);
     }
