@@ -142,7 +142,7 @@ public class Configuracoes extends JFrame{
 
             if(modoMaluco == true) {
 
-                C.NUM_BOMBA_MALUCA = 10;
+                C.NUM_BOMBA_MALUCA = 8;
                 System.out.println("Modo maluco");
             }
 
@@ -160,7 +160,7 @@ public class Configuracoes extends JFrame{
             
             if(modoMaluco == true) {
 
-                C.NUM_BOMBA_MALUCA = 20;
+                C.NUM_BOMBA_MALUCA = 15;
             
             } else {
 
@@ -169,7 +169,7 @@ public class Configuracoes extends JFrame{
             }
 
 
-            C.NUM_BOMBAS = 30 - C.NUM_BOMBA_MALUCA;
+            C.NUM_BOMBAS = 20 - C.NUM_BOMBA_MALUCA;
             C.NUM_COLUNAS = 20;
             C.NUM_LINHAS = 10;
             numBandeiras = 30;
@@ -178,7 +178,7 @@ public class Configuracoes extends JFrame{
 
             if(modoMaluco == true) {
 
-                C.NUM_BOMBA_MALUCA = 70;
+                C.NUM_BOMBA_MALUCA = 30;
 
             } else {
 
@@ -186,7 +186,7 @@ public class Configuracoes extends JFrame{
 
             }
 
-            C.NUM_BOMBAS = 70 - C.NUM_BOMBA_MALUCA;
+            C.NUM_BOMBAS = 50 - C.NUM_BOMBA_MALUCA;
             C.NUM_COLUNAS = 20;
             C.NUM_LINHAS = 20;
             numBandeiras = 70;
@@ -198,6 +198,9 @@ public class Configuracoes extends JFrame{
 
     }
 
-    
+    public int ajustarJanela() {
+
+        return dificuldadeAtualIndex;
+    }
 
 }

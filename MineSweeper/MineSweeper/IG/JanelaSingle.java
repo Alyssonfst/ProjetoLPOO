@@ -25,8 +25,18 @@ public class JanelaSingle extends JFrame implements JanelaInterface {
     public JanelaSingle(long tempoInicial, Configuracoes conf) {
         super("Campo Minado");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 500);
-        setLocationRelativeTo(null);
+        switch (conf.ajustarJanela()) {
+            case 0:
+                setSize(500,500);
+                break;
+        
+            case 1:
+
+                setSize(1100,700);
+                break;
+            default: 
+                setSize(1200,700);
+        }        setLocationRelativeTo(null);
 
         this.conf = conf;
         this.tempoInicial = tempoInicial;
