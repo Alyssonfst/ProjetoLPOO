@@ -1,5 +1,7 @@
 package MineSweeper.IG;
 
+import javax.swing.JOptionPane;
+
 import MineSweeper.Lógica.C;
 import MineSweeper.Lógica.Celula;
 
@@ -10,14 +12,19 @@ public class JanelaMulti extends JanelaSingle {
     private int pontos1 = 0;
     private int pontos2 = 0;
     private Configuracoes conf;
+    private Menu menu;
     private int linhaClicada;
     private int colunaClicada;
-    private int celulasReveladas = 0;
+    private int celulasReveladas1 = 0;
+    private int celulasReveladas2 = 0;
+    private int celulasReveladas = celulasReveladas1 + celulasReveladas2;
+    private int minasReveladas = 0;
+    private int minasTotais = C.NUM_BOMBAS;
+
 
     public JanelaMulti(long tempoInicial, Configuracoes conf) {
 
         super(tempoInicial, conf);
-        System.out.println("multiplayer on");
         jogadorAtual();
 
     }
@@ -35,19 +42,17 @@ public class JanelaMulti extends JanelaSingle {
 
         if(jogador1 == true) {
 
-            System.out.println("jogador 1");
             setTitle("Jogador 1");
         
         } else {
 
-            System.out.println("jogador 2");
             setTitle("Jogador 2");
         }
     }
 
     public int pontoMinas(int pontuacao) {
 
-        pontuacao -= 10;
+        pontuacao -= 100;
 
         return pontuacao;
     }
@@ -55,19 +60,92 @@ public class JanelaMulti extends JanelaSingle {
     @Override
     public void verificarFinalizado() {
         
-        if(getTabuleiro().isFinalizado() || celulasReveladas == C.NUM_COLUNAS * C.NUM_LINHAS) {
+        Celula celula = getTabuleiro().getCelula(linhaClicada, colunaClicada);
 
-            super.verificarFinalizado();
+        for(int i = 0; i < C.NUM_LINHAS; i++) {
+
+            for(int j = 0; j < C.NUM_COLUNAS; j++) {
+
+                if(celula.isMinada() && celula.isRevelada()) {
+
+                    minasReveladas++;
+                }
+            }
+        }
+
+
+        if(getTabuleiro().isFinalizado() || celulasReveladas == C.NUM_COLUNAS * C.NUM_LINHAS || minasTotais == minasReveladas) {
+
+            JOptionPane.showMessageDialog(this, "Pontuação do Jogador 1: " + pontos1);
+            JOptionPane.showMessageDialog(this, "Pontos do jogador 2: " + pontos2);
+            
+            int escolha = JOptionPane.showConfirmDialog(
+                this,
+                "Deseja reiniciar o jogo?",
+                "Reiniciar",
+                JOptionPane.YES_NO_OPTION);
+
+                if(escolha == JOptionPane.YES_OPTION) {
+
+                    reiniciarJogo();
+
+                } else {
+
+                    this.dispose();
+
+                    if(menu == null) {
+
+                        menu = new Menu();
+                        
+                    }
+
+                    if(conf == null) {
+
+                        conf = new Configuracoes();
+                    }
+
+                    menu.setVisible(true);
+                }
+
         }
     }
     
     @Override
     public void clicarCelula(int linha, int coluna) {
-   
         linhaClicada = linha;
         colunaClicada = coluna;
-        super.clicarCelula(linha, coluna);     
+        Celula celula = getTabuleiro().getCelula(linha, coluna);
+
+        if (jogador1) {
+
+            celula = getTabuleiro().getCelula(linha, coluna);
+
+            if (!celula.isRevelada() && !celula.isMinada()) {
+
+                celulasReveladas1++;
+                pontos1 = pontuacaoPorRevelarVazio(pontos1);
+            }
+
+        } else if (jogador2) {
+
+            celula = getTabuleiro().getCelula(linha, coluna);
+
+            if (!celula.isRevelada() && !celula.isMinada()) {
+
+                celulasReveladas2++;
+                pontos2 = pontuacaoPorRevelarVazio(pontos2);
+            }
+        }
+
+        if(celula.isRevelada()) {
+            return;
+        }
+
+        super.clicarCelula(linha, coluna);
         mudarJogador();
+        verificarFinalizado();
+        System.out.println(celulasReveladas1);
+        System.out.println(celulasReveladas2);
     }
 
      @Override
@@ -75,18 +153,25 @@ public class JanelaMulti extends JanelaSingle {
         
         Celula celulaAtual = getTabuleiro().getCelula(linhaClicada, colunaClicada);
 
-        if(jogador1) {
+        if(celulaAtual.isMinada()) {
 
-            pontoMinas(pontos1);
+            minasReveladas++;
+            minasReveladas = minasReveladas - 100;
+            if(jogador1) {
+
+                pontos1 += pontoMinas(0);
+                celulasReveladas1++;
+                
+            }
+    
+            if(jogador2) {
+    
+                pontos2 += pontoMinas(0);
+                celulasReveladas2++;
+            }
+        
             
         }
-
-        if(jogador2) {
-
-            pontoMinas(pontos2);
-        }
-        
-        celulasReveladas++;
         celulaAtual.setRevelada(true);
         atualizarInterface();
         
@@ -96,10 +181,25 @@ public class JanelaMulti extends JanelaSingle {
     public void revelarCelulasAdjacentes(int linha, int coluna) {
 
         super.revelarCelulasAdjacentes(linha, coluna);
-        celulasReveladas++;
-        System.out.println(celulasReveladas);
-    }
+        
+        }
     
 
+    @Override
+    public void reiniciarJogo() {
+
+        pontos1 = 0;
+        pontos2 = 0;
+        minasReveladas = 0;
+        celulasReveladas1 = 0;
+        celulasReveladas2 = 0;
+        super.reiniciarJogo();
+    }
+
+    public int pontuacaoPorRevelarVazio(int pontos) {
+
+            return pontos + 100; 
+        
+    }
 
 }
